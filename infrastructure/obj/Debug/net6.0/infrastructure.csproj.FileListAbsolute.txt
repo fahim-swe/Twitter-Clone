@@ -1,0 +1,15 @@
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/bin/Debug/net6.0/infrastructure.deps.json
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/bin/Debug/net6.0/infrastructure.dll
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/bin/Debug/net6.0/ref/infrastructure.dll
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/bin/Debug/net6.0/infrastructure.pdb
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/bin/Debug/net6.0/core.dll
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/bin/Debug/net6.0/core.pdb
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.csproj.AssemblyReference.cache
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.AssemblyInfoInputs.cache
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.AssemblyInfo.cs
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.csproj.CoreCompileInputs.cache
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.csproj.CopyComplete
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.dll
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/ref/infrastructure.dll
+/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/infrastructure/obj/Debug/net6.0/infrastructure.pdb
