@@ -1,0 +1,94 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/core/core.csproj": {}
+  },
+  "projects": {
+    "/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/core/core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/core/core.csproj",
+        "projectName": "core",
+        "projectPath": "/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/core/core.csproj",
+        "packagesPath": "/home/fahim/.nuget/packages/",
+        "outputPath": "/home/fahim/Documents/Greeky Solution/Day_01/Back_End/_look_at_baby/core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/fahim/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.9, )"
+            },
+            "Microsoft.IdentityModel.JsonWebTokens": {
+              "target": "Package",
+              "version": "[6.23.1, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.23.1, )"
+            },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[2.17.1, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.17.1, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.4.0, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.6.66, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.23.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/dotnet6-6.0.110/sdk/6.0.110/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
