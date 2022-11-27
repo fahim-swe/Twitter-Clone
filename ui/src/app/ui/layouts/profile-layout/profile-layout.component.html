@@ -1,0 +1,29 @@
+<ng-container *ngIf="(tweets$|async) as tweets">
+
+<div class="h-full w-full relative">
+  <div 
+    infiniteScroll
+    [infiniteScrollDistance]=".4"
+    [infiniteScrollThrottle]="300"
+    (scrolled)="nextPage()"
+    [scrollWindow]="false"
+    class="h-[calc(100vh-64px)] md:h-screen w-full overflow-y-scroll"
+  >
+    <app-user-profile-card [userId]="userId$ | async"></app-user-profile-card>
+    <app-create-tweet (submit)="tweeted($event)" *ngIf="(userId$|async) == myId"></app-create-tweet> 
+    <div class="p-4 font-bold w-full flex justify-center items-center text-2xl text-gray-700">All Tweets</div>
+    <div class=" flex items-center flex-col w-full">
+      <app-tweet-view *ngFor="let tweet of tweets" [tweetModel]="tweet" class="w-full" (deleted)="deleted(tweet)"></app-tweet-view>
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+        *ngIf="loading$|async"
+      ></mat-progress-spinner>
+    <div class="h-16 md:h-0"></div>
+    </div>
+
+    <div class="w-full  h-full p-20" *ngIf="tweets.length<=0 && !(loading$|async)">
+  <img src="assets/no_data.svg"  alt="">
+    </div>
+  </div>
+</div>

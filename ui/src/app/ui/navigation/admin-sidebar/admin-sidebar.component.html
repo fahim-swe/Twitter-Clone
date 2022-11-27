@@ -1,0 +1,29 @@
+<div class="h-full w-full flex flex-col justify-start items-center p-5">
+  <button
+    mat-flat-button
+    class="w-full mb-5"
+    [color]="lastClicked === 1 ? 'primary' : ''"
+    (click)="lastClicked = 1"
+    routerLink="/admin"  
+  >
+    Home   
+  </button>
+  <button
+    mat-flat-button
+    class="w-full mb-5"
+    [color]="lastClicked === 2 ? 'primary' : ''"
+    (click)="lastClicked=2"
+    routerLink="/home"  
+  >
+   Regular user
+  </button>
+
+  <button
+    mat-button
+    class="w-full mb-5"
+    [color]="lastClicked === 3 ? 'primary' : ''"
+    (click)="logout()"
+  >
+   Log out
+  </button>
+</div>

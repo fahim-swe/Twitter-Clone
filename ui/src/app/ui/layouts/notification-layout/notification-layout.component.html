@@ -1,0 +1,39 @@
+<div class="home-container">
+  <div
+    class="absolute border-b border-b-gray-300 w-full top-0 z-50"
+  >
+    <mat-toolbar class="glass">
+      <mat-toolbar-row> Notification </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+
+<div 
+    class="h-[calc(100vh-64px)] md:h-screen w-full overflow-y-scroll"
+    *ngIf="notifications$|async as notifications"
+    infiniteScroll
+    [infiniteScrollDistance]=".4"
+    [infiniteScrollThrottle]="300"
+    (scrolled)="nextPage()"
+    [scrollWindow]="false"
+  >
+    <div class="h-16"></div>
+      <app-notification-view
+        *ngFor="
+          let notification of notifications"
+        [notification]="notification"></app-notification-view>
+
+    <div class="flex justify-center align-middle" *ngIf="loading$ | async">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+    </div>
+
+    <div class="h-16 md:h-0"></div>
+    <div class="w-full  h-full p-20" *ngIf="notifications.length<=0 && !(loading$|async)">
+  <img src="assets/no_data.svg"  alt="">
+    </div>
+</div>
+
+    
+  </div>

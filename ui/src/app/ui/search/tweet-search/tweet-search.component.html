@@ -1,0 +1,18 @@
+<div *ngIf="tweetModels$ | async as tweetModels"
+    infiniteScroll
+    [infiniteScrollDistance]=".4"
+    [infiniteScrollThrottle]="300"
+    (scrolled)="nextPage()"
+    [scrollWindow]="false"
+    class="h-[calc(100vh-64px)] md:h-screen w-full overflow-y-scroll"
+>
+  <div class="h-16"></div>
+  <app-tweet-view *ngFor="let tweetModel of tweetModels" (deleted)="deleted(tweetModel)" [tweetModel]="tweetModel"></app-tweet-view>
+    <div class="flex justify-center align-middle" *ngIf="isLoading$ | async">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+    </div>
+    <div class="h-16 md:h-0"></div>
+</div>

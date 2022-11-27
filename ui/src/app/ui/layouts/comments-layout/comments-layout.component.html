@@ -1,0 +1,49 @@
+<div *ngIf="(tweet$|async).createdAt">
+
+<div class="w-full h-full relative overflow-hidden">
+  <div class="absolute border-b border-b-gray-300 w-full top-0 z-50">
+    <mat-toolbar class="glass"><span><button mat-icon-button (click)="back()"><mat-icon>arrow_back</mat-icon></button></span> Comments </mat-toolbar>
+  </div>
+  <div
+    class="h-[calc(100vh-64px)] md:h-screen w-full overflow-y-scroll"
+    infiniteScroll
+    [infiniteScrollDistance]="0.4"
+    [infiniteScrollThrottle]="200"
+    [scrollWindow]="false"
+    (scrolled)="onScroll()"
+  >
+    <div class="h-16"></div>
+    <app-tweet-view [tweetModel]="tweet$|async" [fullView]="true"></app-tweet-view>
+    <app-comment-view
+      *ngFor="let comment of comments$ | async"
+      [comment]="comment"
+      (deleted)="deleted(comment)"
+    ></app-comment-view>
+    <div class="flex justify-center align-middle" *ngIf="loading$ | async">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+    </div>
+    <div class="h-16 md:h-0"></div>
+    <div class="h-16"></div>
+  </div>
+  <div class="absolute bottom-16 md:bottom-0 w-full bg-white">
+    <mat-form-field appearance="outline" class="w-full -mb-5">
+      <mat-label>comment</mat-label>
+      <input
+        type="text"
+        matInput
+        placeholder="write your comments"
+        name="commentText"
+        [(ngModel)]="commentText"
+      />
+      <button mat-icon-button matSuffix color="primary" (click)="sendComment()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
+
+</div>
+

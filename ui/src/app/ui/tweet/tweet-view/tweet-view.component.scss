@@ -1,0 +1,22 @@
+mat-card {
+  border-radius: 0px;
+  border-bottom: 1px solid #eee;
+}
+.mat-card-footer {
+  color: rgba($color: #000000, $alpha: 0.7);
+  display: flex;
+  justify-content: space-evenly;
+}
+.mat-card-content {
+  font-size: 16px;
+  line-height: 25px;
+}
+
+.mat-card-header{
+ width: 100%;
+}
+.mat-card-actions{
+width: 100%;
+display: flex;
+justify-content: flex-end;
+}

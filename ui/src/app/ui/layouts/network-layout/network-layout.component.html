@@ -1,0 +1,23 @@
+<div class="w-full h-full relative overflow-hidden">
+  <div class="absolute border-b border-b-gray-300 w-full top-0 z-50" >
+  <mat-toolbar class="glass">
+    <mat-toolbar-row class="border-b border-b-gray-300"> Network </mat-toolbar-row>
+  </mat-toolbar>
+  </div>
+    <div class="h-16"></div>
+  <div class="overflow-hidden">
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="Followers" class="glass">  
+         <app-follower-list></app-follower-list>    
+       </mat-tab>
+       <mat-tab label="Followings"> 
+        <app-following-list></app-following-list>   
+       </mat-tab>
+       <mat-tab label="Blocked"> 
+        <app-block-list ></app-block-list>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+
