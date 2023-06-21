@@ -10,11 +10,11 @@ Took charge of back-end development using C# and applied the unit of work and re
 The project was completed by a two-member team, consisting of myself and another team member. We both had specific responsibilities, with my focus on the back-end development and the other team member handling the front-end development. Together, we successfully delivered a high-quality Twitter Clone application that met the project objectives.
 
 
-# Backend: C#, Dotnet Web API
-# Database: MongoDB (or specify the database technology used)
-# Caching: Redis
-# Message Queuing: RabbitMQ
-# Frontend: Angular 14, Angular Material
+ Backend: C#, Dotnet Web API
+ Database: MongoDB (or specify the database technology used)
+ Caching: Redis
+ Message Queuing: RabbitMQ
+ Frontend: Angular 14, Angular Material
 
 # User's Profile
 
