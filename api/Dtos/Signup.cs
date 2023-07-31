@@ -1,4 +1,3 @@
-
 using System.ComponentModel.DataAnnotations;
 using api.Helpers;
 
@@ -6,8 +5,8 @@ namespace api.Dtos
 {
     public class Signup
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please Provide Last Name")]  
-        [StringLength(20, MinimumLength = 5, ErrorMessage = "Last Name Should be min 5 and max 20 length")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please Provide  Name")]  
+        [StringLength(350, MinimumLength = 3, ErrorMessage = "Name Should be min 3 and max 350 length")]
         public string FullName {get; set;} = null!;
 
 
@@ -17,12 +16,17 @@ namespace api.Dtos
         public DateTime DateOfBirth {get; set;}
 
         [Required]
-        [MinLength(4)]
+        [MinLength(3)]
         public string UserName {get; set;} = null!;
 
         [Required]
         [EmailAddress]
         public string Email {get; set;} = null!;
+
+
+        public int Gender { get; set; }
+
+
         public DateTime CreatedAt {get; protected set;} = DateTime.Now;
 
 

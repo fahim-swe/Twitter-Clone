@@ -20,6 +20,8 @@ namespace infrastructure.Services.RabbitMQ
             factory.DispatchConsumersAsync = true;
             _connection = factory.CreateConnection();
         }
+
+        
         public IConnection getConnection()
         {
             return _connection;

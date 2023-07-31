@@ -10,16 +10,10 @@ namespace core.Interfaces
     {
      
         Task<IEnumerable<Tweet>> SearchTweet(string hashTag, int pageNumber, int pageSize);
-        Task<IEnumerable<Tweet>> UserTimeLine(string userId, int pageNumber, int pageSize);
-        Task<IEnumerable<HashTag>> HashTags(int pageNumber, int pageSize);
+        Task<Object> UserTimeLine(string userId, int pageNumber, int pageSize);
         Task<int> UserTimeLineCount(string userId);
         Task<int> HashTagPostCount(string hashTag);
-        Task<Boolean> IsValidTweet(string postId);
-        Task<IEnumerable<string>> Newsfeeds(string userId, int pageNumber, int  pageSize);
+       
     }
 
-    public class TweetId 
-    {
-        public string Id {get; set;}
-    }
 }

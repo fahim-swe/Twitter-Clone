@@ -1,12 +1,13 @@
 using System.Linq.Expressions;
+using api.Cache;
 using api.Dtos;
 using api.Helper;
 using AutoMapper;
 using core.Entities;
 using core.Interfaces;
+using core.Interfaces.Redis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 
 namespace api.Controllers.Admin
 {
@@ -18,23 +19,33 @@ namespace api.Controllers.Admin
         
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IRedisService _redisService;
 
-        public AdminController(IUnitOfWork unitOfWork,  IMapper mapper)
+        public AdminController(IUnitOfWork unitOfWork,  IMapper mapper, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _redisService = redisService;
         }
 
 
         [HttpGet("user")]
+        [Cached(60)]
         public async Task<IActionResult> GetUsers([FromQuery]string? blockpros, [FromQuery]PaginationFilter filter)
         {
             var _filter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             Expression<Func<AppUser, Object>> sortByCreateDate = (s) => s.CreatedAt;
             Expression<Func<AppUser, bool>> searchFilter;
-            if(blockpros == "Block") searchFilter = (s) => s.isBlock == true;
-            else if(blockpros=="Unblock") searchFilter = (s) => s.isBlock == false;
-            else searchFilter = s => true;
+
+            
+
+
+            if(blockpros == "Block") searchFilter = (s) => s.isBlock == true && s.id != User.GetUserId();
+            else if(blockpros=="Unblock") searchFilter = (s) => s.isBlock == false && s.id != User.GetUserId();
+            else searchFilter = s => s.id != User.GetUserId();
+
+        
+
             var userList = await _unitOfWork.UserRepository.FindManyAsync(searchFilter, sortByCreateDate, _filter.PageNumber, _filter.PageSize);
             var totallCount = await _unitOfWork.UserRepository.CountAsync(searchFilter);
             var _users = _mapper.Map<IEnumerable<MemberDto>>(userList);
@@ -58,6 +69,8 @@ namespace api.Controllers.Admin
             _unitOfWork.AdminBlockRepository.InsertOneAsync(block);
             _unitOfWork.UserRepository.ReplaceOneAsync(userId, user);
 
+            await _redisService.DeleteAllkeysAsnyc();
+
             return await _unitOfWork.Commit() ? Ok(new Response<string>("blocked successfully")) : BadRequest(new Response<string>("Error to block"));
         }
         
@@ -75,6 +88,8 @@ namespace api.Controllers.Admin
             user.isBlock = false;
             _unitOfWork.AdminBlockRepository.DeleteOneAsync(filter => filter.UserId == userId);
             _unitOfWork.UserRepository.ReplaceOneAsync(userId, user);
+
+            await _redisService.DeleteAllkeysAsnyc();
 
             return await _unitOfWork.Commit() ? Ok(new Response<string>("Unblocked")) : BadRequest(new Response<string>("Error"));
         }
@@ -97,11 +112,12 @@ namespace api.Controllers.Admin
 
             _unitOfWork.UserRepository.ReplaceOneAsync(Id, user);
 
+            await _redisService.DeleteAllkeysAsnyc();
+
             return (await _unitOfWork.Commit()) ? Ok(new Response<string>("Updated Successfully")) : BadRequest(new Response<string>("Opp!, Not updated! An unknown expection occurs"));
         }
 
 
-        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("make-admin/{userId}")]
         public async Task<IActionResult> MakeAdmin([FromRoute]string userId)
@@ -117,23 +133,6 @@ namespace api.Controllers.Admin
             return await _unitOfWork.Commit() ? Ok(new Response<string>("you have added " + user.FullName + " as admin")) : BadRequest(new Response<string>("Error making admin"));
         }
 
-
-        // [Authorize(Roles = "Admin")]
-        // [HttpGet]
-        // [Route("block-list")]
-        // public async Task<IActionResult> BlockList([FromQuery]PaginationFilter filter)
-        // {
-        //     var _filter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-
-
-        //     Expression<Func<AdminBlock, Object>> sortByCreateDate = (s) => s.CreatedAt;
-            
-        //     var blockList = await _unitOfWork.AdminBlockRepository.FindManyAsync(filter => true, sortByCreateDate,_filter.PageNumber, _filter.PageSize);
-        //     var totallCount = await _unitOfWork.AdminBlockRepository.CountAsync(x => true);
-
-        //     var pagedResponse = new PagedResponse<IEnumerable<AdminBlock>>(blockList, filter.PageNumber, filter.PageSize, totallCount);
-        //     return Ok(pagedResponse);
-        // }
    
     } 
 }

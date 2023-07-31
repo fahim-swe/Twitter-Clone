@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace api.Dtos
 {
     public class FollwerDto
     {   
+
         public string Id { get; set;}
         public string FullName { get; set; }
         public string UserName { get; set; } = null!;

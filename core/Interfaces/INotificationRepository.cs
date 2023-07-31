@@ -8,6 +8,6 @@ namespace core.Interfaces
 {
     public interface INotificationRepository : IRepository<Notification>
     {
-        void UpdateBlockAttribute(string to, string from);
+        void UpdateBlockAttribute(string to, string from, bool flag);
     }
 }

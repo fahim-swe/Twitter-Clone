@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace api.Dtos
 {
@@ -11,6 +8,8 @@ namespace api.Dtos
         public string FullName { get; set; }
         public string UserName { get; set; } = null!;
         public string Email { get; set; } = null!;
+
+        public int Gender { get; set; }
         public DateTime DateOfBirth {get; set;}
         public DateTime CreatedAt {get; set;}
         public string Role {get; set;} = "User";

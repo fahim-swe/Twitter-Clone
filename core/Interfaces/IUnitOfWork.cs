@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using core.Entities;
 
 namespace core.Interfaces
@@ -12,7 +8,6 @@ namespace core.Interfaces
         IRepository<Follow> FollowRepository{get;}
         IRepository<Likes> LikeRepository{get;}
         IRepository<Token> TokenRepository {get;}               
-        IRepository<HashTag> HashTagRepository{get;}
         IRepository<AdminBlock> AdminBlockRepository {get;}
         IRepository<UBlock> UserBlockRepository{get;}
 

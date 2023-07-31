@@ -21,12 +21,14 @@ namespace infrastructure.Database.Repository
             this._follow = base.Context.GetCollection<Follow>((typeof(Follow).Name));
             this._user = base.Context.GetCollection<AppUser>(typeof(AppUser).Name);
             this._notification = base.Context.GetCollection<Notification>(typeof(Notification).Name);
+
+
+          
         }
 
     
 
-        
-        
+    
       
         public async Task<IEnumerable<AppUser>> SearchingUsers(string UserName, int pageNumber, int pageSize)
         {
@@ -52,6 +54,8 @@ namespace infrastructure.Database.Repository
             return result;
         }
 
+        
+
         public async Task<int> SearchingUsersCountAsync(string userName)
         {
             var filterBuilder = Builders<AppUser>.Filter;
@@ -61,6 +65,27 @@ namespace infrastructure.Database.Repository
             var count = (int)await DbSet.Find(filter).CountAsync();
             return count;
         }
+
+
+        // public async Task<AppUser> GetTopUsers(string userId, int pageNumber ,int pageSize)
+        // {
+
+        //     BsonDocument pipelineStage1 = new BsonDocument{
+        //         {
+        //             "$match", new BsonDocument{
+        //                 { "_id", false}
+        //             }
+        //         }
+        //     };
+        //     var query = _user.AsQueryable();
+
+        //      var filterBuilder = Builders<Follow>.Filter;
+        //     var filter =  filterBuilder.Eq("userId", userId);
+
+        //     query = (MongoDB.Driver.Linq.IMongoQueryable<AppUser>)query.Where(filter => filter.isBlock == true);
+
+        //     query = 
+        // }
 
     }
 }

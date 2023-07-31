@@ -9,5 +9,7 @@ namespace core.Interfaces.Redis
     {
         Task CacheResponseAsync(string cacheKey, Object response, TimeSpan timeTimeLive);
         Task<string> GetCachedResponseAsync(string cacheKey);
+
+        Task<Boolean> DeleteAllkeysAsnyc();
     }
 }

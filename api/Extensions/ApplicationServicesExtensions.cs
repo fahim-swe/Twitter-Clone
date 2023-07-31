@@ -1,5 +1,6 @@
 
 using api.Helper;
+using core.Entities;
 using core.Entities.ServiceEntities;
 using core.Interfaces;
 using core.Interfaces.Email;
@@ -20,19 +21,19 @@ namespace api.Extensions
         {
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-
             services.Configure<MailSettings>(_config.GetSection("MailSettings"));
             services.AddTransient<IMailService, MailService>();
-
             return services;
         }
 
         public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration _config)
         {
             services.Configure<DatabaseSettings>(_config.GetSection("DatabaseSettings"));
+
             services.AddScoped<IMongoContext, MongoContext>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+          
             return services;
         }
         public static IServiceCollection AddRabbitMQServices(this IServiceCollection services, IConfiguration _config)
@@ -40,13 +41,15 @@ namespace api.Extensions
             services.Configure<RabbitMQConnectionFactorySettings>(
                  _config.GetSection("RabbitMQConectionFactory"));
 
-            services.AddSingleton<IRabbitMQConnection, RabbitMQConnection>();
-
-            services.AddSingleton<ISignalRConsumer, SignalRConsumer>();
-            
-            
             services.AddScoped(typeof(IPublish<>), typeof(Publish<>));
-            
+            services.AddSingleton<IRabbitMQConnection, RabbitMQConnection>();
+        
+
+
+            services.AddSingleton<IConsumer<Notification>, Consumer<Notification>>();
+            services.AddSingleton<IConsumer<Comments>, Consumer<Comments>>();
+
+
             return services;
         }
 
@@ -54,11 +57,8 @@ namespace api.Extensions
         {
             services.Configure<RedisCacheSetting>(_config.GetSection("RedisCacheSetting"));
             services.AddSingleton<IResponseCacheService, ResponseCacheService>(); 
-            services.AddTransient<IRedisService, RedisService>();
+            services.AddScoped<IRedisService, RedisService>();
             return services;
         }
-    
-    
-        
     }
 }

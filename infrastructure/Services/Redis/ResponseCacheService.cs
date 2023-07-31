@@ -34,6 +34,15 @@ namespace infrastructure.Services.Redis
             return ;
         }
 
+        public async Task<bool> DeleteAllkeysAsnyc()
+        {
+            
+            var iServer = _connection.GetServer(_redisCachettings.Value.Host, _redisCachettings.Value.Port);
+            await iServer.FlushAllDatabasesAsync();
+            
+            return true;
+        }
+
         public async Task<string> GetCachedResponseAsync(string cacheKey)
         {
             var data = await _database.StringGetAsync(cacheKey);

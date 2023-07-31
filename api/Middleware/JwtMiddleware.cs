@@ -24,12 +24,12 @@ namespace api.Middleware
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                await attachAccountToContext(context, _blockRepository, token);
+               context =  await attachAccountToContext(context, _blockRepository, token);
 
             await _next(context);
         }
 
-        private async Task attachAccountToContext(HttpContext context, IRepository<AdminBlock> _blockRepository , string token)
+        private async Task<HttpContext> attachAccountToContext(HttpContext context, IRepository<AdminBlock> _blockRepository , string token)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace api.Middleware
                     ValidateAudience = false,
                     ValidateIssuer = false,
                     ValidateIssuerSigningKey = true,
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                    
                     // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
@@ -57,9 +57,9 @@ namespace api.Middleware
             }
             catch 
             {
-                // do nothing if jwt validation fails
-                // account is not attached to context so request won't have access to secure routes
+              
             }
+            return context;
         }
     }
 }

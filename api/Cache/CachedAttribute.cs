@@ -4,7 +4,6 @@ using core.Interfaces.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-
 namespace api.Cache
 {
 
@@ -24,28 +23,40 @@ namespace api.Cache
         {
             var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
             var cacheKey = generateCacheKeyFromRequest(context);
-            var chacheResponse = await cacheService.GetCachedResponseAsync(cacheKey);
+
+            try{
+                 var chacheResponse = await cacheService.GetCachedResponseAsync(cacheKey);
             
-            if(!string.IsNullOrEmpty(chacheResponse)){
+                if(!string.IsNullOrEmpty(chacheResponse)){
 
-              
-                var contentResult = new ContentResult
-                {
-                    Content = chacheResponse,
-                    ContentType =  "application/json; charset=utf-8",
-                    StatusCode = 200
-                };
+                
+                    var contentResult = new ContentResult
+                    {
+                        Content = chacheResponse,
+                        ContentType =  "application/json; charset=utf-8",
+                        StatusCode = 200
+                    };
 
-                context.Result = contentResult;
-                return ;
+                    context.Result = contentResult;
+                    return ;
+                }
             }
+            catch{
+                
+            }
+           
 
             var executedContext = await next();
             
             if(executedContext.Result is OkObjectResult okObjectResult)
             {
+                try{
+                    await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
+                }
+                catch{
+
+                }
                
-               await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
             }
         }
 
@@ -56,7 +67,7 @@ namespace api.Cache
 
             var userId =  (string)context.HttpContext.Items["userId"];
 
-            if(this.containKey(path)) userId = "";
+            if(containKey(path)) userId = "";
 
             keyBuilder.Append($"{userId + path}");
             
@@ -69,7 +80,7 @@ namespace api.Cache
 
         private bool containKey(string path)
         {
-            string[] keyword = {"Like", "Like/Isliked", "Like/likes", "Tweet/search", "Tweet/get-tweets",  "tweet/hashTag", "Comment/Comments/","Users/serach-users"};
+            string[] keyword = {"Admin/user", "Block", "comment", "like", "Notification",  "Search/users", "Search/tweets","tweet/tweets/", "user/get-users"};
 
             foreach(var key in keyword){
                 if(path.Contains(key)) return true;

@@ -8,6 +8,7 @@ using AutoMapper;
 using core.Entities;
 using core.Interfaces;
 using core.Interfaces.RabbitMQ;
+using core.Interfaces.Redis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers.Users
@@ -21,16 +22,20 @@ namespace api.Controllers.Users
        
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public FollowerController(IPublish<Follow> follwerpublish, IPublish<Notification> notificationPublish , IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly IRedisService _redisService;
+
+        public FollowerController(IPublish<Notification> notificationPublish , IMapper mapper, IUnitOfWork unitOfWork, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _notificationPublish = notificationPublish;
             _mapper = mapper;
+
+            _redisService = redisService;
         }
 
 
         [HttpGet("followers")]
-        [Cached(20)]
+        [Cached(60)]
         public async Task<IActionResult> GetFollwer([FromRoute]string userId, [FromQuery]PaginationFilter filter)
         {
             var _filter = new PaginationFilter(filter.PageNumber, filter.PageSize);
@@ -45,12 +50,11 @@ namespace api.Controllers.Users
 
 
         [HttpGet("followings")]
-        [Cached(20)]
+        [Cached(60)]
         public async Task<IActionResult> Following([FromRoute]string userId, [FromQuery]PaginationFilter filter)
         {
             var _filter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
-            // following userId => followingId
             Expression<Func<Follow, Object>> sortByCreateDate = (s) => s.CreatedAt;
             
             var result = await _unitOfWork.FollowRepository.FindManyAsync(filter => filter.UserId == userId, sortByCreateDate, _filter.PageNumber, _filter.PageSize);
@@ -63,17 +67,29 @@ namespace api.Controllers.Users
         }
 
         
-        
-
+    
       
         [HttpPost("follow")]
         public async Task<IActionResult> Follow([FromRoute]string userId)
         {
             if(!await _unitOfWork.UserRepository.ExistsAsync(filter => filter.id == userId)) 
-                return NotFound(new Response<string>("Not Found"));
+                return NotFound();
+                
+
+            if(await _unitOfWork.AdminBlockRepository.ExistsAsync(filter => filter.UserId == userId)) return StatusCode(403, "admin_block");
+            
 
             if(User.GetUserId() == userId)
                 return BadRequest(new Response<string>("You can't follow yourself"));
+
+            if(await _unitOfWork.UserBlockRepository.ExistsAsync(filter => filter.UserId == User.GetUserId() && filter.BlockId == userId) 
+
+                 || 
+            
+                await _unitOfWork.UserBlockRepository.ExistsAsync(filter => filter.UserId == userId && filter.BlockId == User.GetUserId())
+             ) return StatusCode(403, "user_blocked");
+
+
 
             if(await _unitOfWork.FollowRepository.ExistsAsync( x => x.UserId == User.GetUserId() && x.Following == userId))
                 return BadRequest(new Response<string>("Already follow"));
@@ -100,16 +116,17 @@ namespace api.Controllers.Users
 
             var user = await _unitOfWork.UserRepository.FindOneAsync(filter => filter.id == User.GetUserId());
             user.TotalFollowings++;
-
             var otherUser = await _unitOfWork.UserRepository.FindOneAsync(filter => filter.id == userId);
             otherUser.TotalFollowers++;
 
             _unitOfWork.FollowRepository.InsertOneAsync(follow);
             _unitOfWork.UserRepository.ReplaceOneAsync(User.GetUserId(), user);
             _unitOfWork.UserRepository.ReplaceOneAsync(otherUser.id, otherUser);
+            _unitOfWork.NotificationRepository.InsertOneAsync(notification);
             
+            await _redisService.DeleteAllkeysAsnyc();
 
-            return await _unitOfWork.Commit() ? Ok(new Response<string>("Added")) : BadRequest(new Response<string>("Failed To  Added")); 
+            return await _unitOfWork.Commit() ? Ok(new Response<string>("Added")) : BadRequest(new Response<string>("Failed_To_Add")); 
         }
 
 
@@ -137,6 +154,9 @@ namespace api.Controllers.Users
             otherUser.TotalFollowers--;
             _unitOfWork.UserRepository.ReplaceOneAsync(userId, otherUser);
 
+
+            await _redisService.DeleteAllkeysAsnyc();
+
             return await _unitOfWork.Commit() ? Ok(new Response<string>("Unfollowed")) : BadRequest(new Response<string>("Error")); 
         }
 
@@ -151,16 +171,16 @@ namespace api.Controllers.Users
             {
                 var user = isFollower ? await _unitOfWork.UserRepository.FindOneAsync(filter => filter.id == follow.UserId && filter.isBlock == false) : await _unitOfWork.UserRepository.FindOneAsync(filter => filter.id == follow.Following && filter.isBlock == false);
 
-                
+               if(user == null) continue;
+
                 var _follow = _mapper.Map<FollwerDto>(user);
                 _follow.Since = follow.CreatedAt;
 
                 if(isFollower){
-                    Console.WriteLine( "My Follwer " +  follow.UserId + " " + follow.Following);
+                   
                     _follow.isFollow = await _unitOfWork.FollowRepository.ExistsAsync(filter => filter.UserId == follow.Following && filter.Following == follow.UserId) ? true : false;
                 }
                 else{
-                    Console.WriteLine("Following " +  follow.UserId + " " + follow.Following);
                     _follow.isFollow = true;
                 }
                 

@@ -13,8 +13,6 @@ namespace core.Entities
 
         [BsonElement("userId"), BsonRepresentation(BsonType.ObjectId)]
         public string UserId {get; set;} = null!;
-        public string FullName {get; set;} = null!;
-        public string UserName {get; set;} = null!;
         public string Content {get; set;} = null!;
         public string? HashTag {get; set;} 
         public int TotalLikes {get; set;}

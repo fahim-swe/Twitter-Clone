@@ -30,25 +30,6 @@ namespace infrastructure.Database.Repository
            return (int)await DbSet.Find(Builders<Tweet>.Filter.Text(hashTag)).CountAsync();
         }
 
-        public async Task<IEnumerable<HashTag>> HashTags(int pageNumber, int pageSize)
-        {
-
-            Expression<Func<HashTag, Object>> myLambbad = (s) => s.CreatedAt;
-            var  sorting = myLambbad;
-
-            
-             
-            var result = await _hashTag.Find(_ => true)
-                .SortByDescending(sorting)
-                .Skip((pageNumber-1)*pageSize)
-                .Limit(pageSize).ToListAsync();
-            return result;
-        }
-
-        public async Task<bool> IsValidTweet(string postId)
-        {
-            return await DbSet.Find(filter => filter.id == postId).AnyAsync();
-        }
 
         public async Task<IEnumerable<Tweet>> SearchTweet(string hashTag, int pageNumber, int pageSize)
         {
@@ -61,8 +42,9 @@ namespace infrastructure.Database.Repository
             return result;
         }
 
-        public async Task<IEnumerable<Tweet>> UserTimeLine(string userId, int pageNumber, int pageSize)
+        public async Task<Object> UserTimeLine(string userId, int pageNumber, int pageSize)
         {
+            
            var result = (from t in _tweet.AsQueryable()
                 join follow in _follow.AsQueryable()
                 on t.UserId equals follow.Following 
@@ -70,14 +52,14 @@ namespace infrastructure.Database.Repository
                 on t.UserId equals user.id 
                 where(follow.UserId == userId && user.isBlock == false)
                 orderby(t.CreatedAt) descending
-                select new Tweet
+                select new 
                 {
                     id = t.id,
                     CreatedAt = t.CreatedAt,
                     UserId = t.UserId,
-                    FullName = t.FullName,
-                    UserName = t.UserName,
-                    Content = t.Content.Substring(0, 50),
+                    FullName = user.FullName,
+                    UserName = user.UserName,
+                    Content = t.Content,
                     HashTag = t.HashTag,
                     TotalLikes =  t.TotalLikes,
                     TotalComments =  t.TotalComments,
@@ -90,15 +72,6 @@ namespace infrastructure.Database.Repository
             return result;
         }
 
-
-        public async Task<string> GetFullContentOfTweet(string tweetId)
-        {
-            var content = await _tweet.Find(filter => filter.id == tweetId).Project(filter => filter.Content.Substring(101)).SingleOrDefaultAsync();
-
-            return  content;
-        }
-
-    
       
         public async Task<int> UserTimeLineCount(string userId)
         {
@@ -115,33 +88,6 @@ namespace infrastructure.Database.Repository
             Console.WriteLine(count);
 
             return count;
-        }
-
-        public async Task<IEnumerable<string>> Newsfeeds(string userId, int pageNumber, int pageSize)
-        {
-            var result =  (from t in _tweet.AsQueryable()
-                join follow in _follow.AsQueryable()
-                on t.UserId equals follow.Following 
-                join user in _user.AsQueryable()
-                on t.UserId equals user.id 
-                where(follow.UserId == userId && user.isBlock == false)
-                orderby(t.CreatedAt) descending
-                select new TweetId{
-                    Id = t.id
-                })
-                .Skip((pageNumber-1)*pageSize)
-                .Take(pageSize);
-            
-
-            List<string>  tweetIds = new List<string>();
-
-            foreach(var id in result)
-            {
-                tweetIds.Add(id.Id);
-            }
-
-
-            return tweetIds;
         }
     }
 }

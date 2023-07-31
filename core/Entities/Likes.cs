@@ -20,6 +20,5 @@ namespace core.Entities
 
         [BsonElement("userId"), BsonRepresentation(BsonType.ObjectId)]    
         public string UserId {get; set;} = null!;
-        public string FullName {get; set;} = null!;
     }
 }

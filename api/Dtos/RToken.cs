@@ -9,9 +9,9 @@ namespace api.Dtos
     public class RToken
     {
         [Required]
-        public String token {get; set;}
+        public String token {get; set;} = null!;
 
         [Required]
-        public String refreshKey {get; set;}
+        public String refreshKey {get; set;} = null!;
     }
 }

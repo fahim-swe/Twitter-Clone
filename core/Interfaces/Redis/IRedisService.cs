@@ -10,5 +10,7 @@ namespace core.Interfaces.Redis
         Task SetAsync(string key, string value, TimeSpan timeTimeLive);
         Task<string> GetAsync(string key);
         Task<Boolean> DeleteAsync(string key);
+
+        Task DeleteAllkeysAsnyc();
     }
 }

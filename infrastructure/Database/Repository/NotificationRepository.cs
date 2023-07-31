@@ -14,9 +14,10 @@ namespace infrastructure.Database.Repository
         {
         }
 
-        public void UpdateBlockAttribute(string to, string from)
+
+        public void UpdateBlockAttribute(string to, string from, bool flag)
         {
-            var update = Builders<Notification>.Update.Set( filter => filter.IsBlock, true);
+            var update = Builders<Notification>.Update.Set( filter => filter.IsBlock, flag);
             Context.AddCommand( () => 
                 DbSet.UpdateManyAsync( (x => x.To == to && x.From == from) ,
                 update, 

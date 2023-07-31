@@ -38,5 +38,20 @@ namespace infrastructure.Services.Redis
             var created = await _database.StringSetAsync(key , value, timeTimeLive);
             return ;
         }
+
+        public async Task DeleteAllkeysAsnyc()
+        {
+            try{
+                var ok = _redisCachettings;
+                var endpoints = _connection.GetEndPoints(true);
+                foreach(var endpoint in endpoints){
+                    var server = _connection.GetServer(endpoint);
+                    await server.FlushAllDatabasesAsync();
+                }
+            }
+            catch{
+
+            }
+        }
     }
 }

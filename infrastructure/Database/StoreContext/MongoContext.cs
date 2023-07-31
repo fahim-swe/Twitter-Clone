@@ -70,10 +70,6 @@ namespace infrastructure.Database.StoreContext
 
         private void ConfigureMongo()
         {
-            if (MongoClient != null)
-            {
-                return;
-            }
             MongoClient = new MongoClient(_databaseSettings.Value.ConnectionString);
 
             Database = MongoClient.GetDatabase(_databaseSettings.Value.DatabaseName);
@@ -82,7 +78,7 @@ namespace infrastructure.Database.StoreContext
             Database.GetCollection<Tweet>((typeof(Tweet).Name)).Indexes.CreateOneAsync(Builders<Tweet>.IndexKeys.Text(x => x.HashTag));
 
             
-
+            
             var indexKeysDefinition = Builders<Token>.IndexKeys.Ascending("expireAt");
             var indexOptions = new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 0, 0)};
             var indexModel = new CreateIndexModel<Token>(indexKeysDefinition, indexOptions);

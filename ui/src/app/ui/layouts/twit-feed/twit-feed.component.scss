@@ -1,0 +1,18 @@
+.tweet-feed-container {
+  height: 100vh;
+  position: relative;
+  overflow-y: hidden;
+  background-color: white;
+
+  .feed {
+    padding-top: 70px;
+    height: 100vh;
+    overflow-y: scroll;
+  }
+}
+
+.cdk-virtual-scroll-viewport {
+  height: 100vh;
+  overflow-y: scroll;
+}
+

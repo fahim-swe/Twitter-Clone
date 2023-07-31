@@ -1,0 +1,38 @@
+<div class="home-container bg-white">
+<div class="absolute border-b border-b-gray-300 w-full top-0  md:top-0 z-50" >
+<mat-toolbar class="glass">
+  <mat-toolbar-row>
+    <button
+      mat-icon-button
+      (click)="drawerOpened = !drawerOpened"
+      [hidden]="(breakPointService.breakpoint$ | async) === breakPoints.Large"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    Admin Panel
+  </mat-toolbar-row>
+</mat-toolbar>
+</div>
+<mat-drawer-container class="h-full w-full">
+  <mat-drawer
+    mode="side"
+    class="w-3/4 md:w-1/5 overflow-hidden"
+    [opened]="drawerOpened"
+  >
+    <app-admin-sidebar></app-admin-sidebar>
+  </mat-drawer>
+  <mat-drawer-content> 
+    <div class="w-full h-screen pt-16 bg-white">
+      <div class="p-4 w-full">
+      <div class="bg-aliceblue rounded-xl overflow-hidden">
+       <router-outlet></router-outlet>
+      </div>
+        </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+</div>
+    <!-- [opened]=" -->
+    <!--   drawerOpened || -->
+    <!--   (breakPointService.breakpoint$ | async) === breakPoints.Large -->
+    <!-- " -->

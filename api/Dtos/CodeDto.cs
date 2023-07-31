@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using api.Helpers;
 
 namespace api.Dtos
@@ -11,14 +8,14 @@ namespace api.Dtos
     {
         [Required]
         [EmailAddress]
-        public String Email {get; set;}
+        public String Email {get; set;} = null!;
 
         [Required]
         [MinLength(6,ErrorMessage ="must be 8 char")]
-        public String Code {get; set;}
+        public String Code {get; set;} = null!;
 
         [Required]
         [CodePasswordValidation]
-        public String Password {get; set;}
+        public String Password {get; set;} = null!;
     }
 }

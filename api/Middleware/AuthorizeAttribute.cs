@@ -17,15 +17,18 @@ namespace api.Middleware
             var block =  (AdminBlock)context.HttpContext.Items["block"];
             if(block != null) 
             {
-                context.Result = new JsonResult( new Response<string>("Block By Admin" + block.CreatedAt)) { StatusCode = StatusCodes.Status401Unauthorized };
+                context.Result = new JsonResult( "admin_block") 
+                { 
+                    StatusCode = StatusCodes.Status403Forbidden
+                };
             }
             
 
             var user = context.HttpContext.Items["userId"];
+            
             if (user == null) {
-                // user not logged in
                 context.Result = new JsonResult(
-                    new Response<string>("Unauthorized")
+                    "Unauthorized"
                 ) {
                     StatusCode = StatusCodes.Status401Unauthorized
                 };
